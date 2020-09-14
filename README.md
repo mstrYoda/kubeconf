@@ -1,5 +1,5 @@
 # kubeconf
-A cli based application to add new config files to kubeconfig
+A cli application to merge multiple config files into one kubeconfig or generate a new one.
 
 # Usage
 
