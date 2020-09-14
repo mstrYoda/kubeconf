@@ -1,8 +1,6 @@
 package main
 
-import (
-	"kubeconf/cmd"
-)
+import "kubeconf/cmd"
 
 func main() {
 	cmd.Execute()

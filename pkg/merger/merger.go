@@ -10,8 +10,9 @@ import (
 
 type KubeConfigCluster struct {
 	Cluster struct {
-		Server                string
-		InsecureSkipTLSVerify bool `yaml:"insecure-skip-tls-verify"`
+		Server                   string
+		InsecureSkipTLSVerify    bool   `yaml:"insecure-skip-tls-verify"`
+		CertificateAuthorityData string `yaml:"certificate-authority-data"`
 	}
 	Name string
 }
@@ -19,7 +20,7 @@ type KubeConfigCluster struct {
 type KubeConfigContext struct {
 	Context struct {
 		Cluster   string
-		Namespace string
+		Namespace string `yaml:",omitempty"`
 		User      string
 	}
 	Name string
