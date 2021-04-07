@@ -17,12 +17,12 @@ package cmd
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"kubeconf/pkg/merger"
 	"os"
 
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 // mergeCmd represents the merge command
@@ -40,15 +40,21 @@ var mergeCmd = &cobra.Command{
 		dry, _ := cmd.LocalFlags().GetBool("dry")
 		showChanges, _ := cmd.LocalFlags().GetBool("show-changes")
 		outputFile, _ := cmd.LocalFlags().GetString("output")
+		userNameAs := cmd.Flag("user-name-as").Value.String()
 
 		if newConfigPath != "" {
 			newConfig := merger.NewKubeConfig(newConfigPath)
+
+			if userNameAs != "" {
+				newConfig.Contexts[0].Context.User = userNameAs
+				newConfig.Users[0].Name = userNameAs
+			}
+
 			currentKubeConfig.MergeNewConfig(*newConfig)
 
 			if currentKubeConfig.IsChanged {
 				if showChanges {
 					if len(currentKubeConfig.ToAddClusters) > 0 {
-						fmt.Println(len(currentKubeConfig.ToAddClusters))
 						fmt.Println("Clusters will be added to kubeconfig:")
 						toShow, _ := yaml.Marshal(currentKubeConfig.ToAddClusters)
 						fmt.Println(string(toShow))
@@ -106,6 +112,10 @@ func init() {
 	mergeCmd.Flags().Bool("dry", false, "Shows generated output and does not persists config changes.")
 	mergeCmd.Flags().Bool("show-changes", false, "Shows resources which will be added to kubeconfig.")
 	mergeCmd.Flags().String("output", "", "Output file path.")
+	mergeCmd.Flags().String("merge-fields", "", "Merge one of the fields context or cluster or user.")
+	mergeCmd.Flags().String("cluster-name-as", "", "Replace cluster name and merge with new name.")
+	mergeCmd.Flags().String("context-name-as", "", "Replace context name and merge with new name.")
+	mergeCmd.Flags().String("user-name-as", "", "Replace user name and merge with new name.")
 }
 
 func Execute() {
