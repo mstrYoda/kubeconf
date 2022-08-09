@@ -15,6 +15,8 @@ A cli application to merge multiple config files into one kubeconfig or generate
 
 `kubeconf merge --new-config=newConfig.yaml --show-changes --dry`
 
+![kubeconf-ss-1](assets/kubeconf-ss-1.png)
+
 - To specify current config path:
 
 `kubeconf merge --kubeconfig=/path/to/config --new-config=newConfig.yaml`
